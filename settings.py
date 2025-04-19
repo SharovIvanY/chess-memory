@@ -1,8 +1,18 @@
 # Настройки окна
-WINDOW_SIZE = 800  # Увеличиваем ширину окна
-BOARD_SIZE = 8
-SQUARE_SIZE = 600 // BOARD_SIZE  # Размер клетки остаётся прежним
+WINDOW_SIZE = 720  # Ширина окна (9 клеток)
+BOARD_SIZE = 8     # Размер доски (8x8)
+SQUARE_SIZE = WINDOW_SIZE // 9  # Размер одной клетки (включая правую часть)
 
 # Цвета
-LIGHT_SQUARE = (240, 217, 181)
-DARK_SQUARE = (181, 136, 99)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BUTTON_COLOR = (0, 128, 255)
+BUTTON_HOVER_COLOR = (0, 0, 255)
+TEXT_COLOR = (255, 255, 255)
+
+# Цвета доски
+LIGHT_SQUARE_COLOR = (240, 217, 181)  # Бежевый
+DARK_SQUARE_COLOR = (181, 136, 99)    # Коричневый
+
+# Максимальная сложность
+MAX_DIFFICULTY = 5

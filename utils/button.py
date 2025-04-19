@@ -1,4 +1,5 @@
 import pygame
+from settings import *
 
 class Button:
     def __init__(self, x, y, width, height, text, color, hover_color, text_color, font_size):
@@ -7,21 +8,23 @@ class Button:
         self.color = color
         self.hover_color = hover_color
         self.text_color = text_color
-        self.font = pygame.font.Font(None, font_size)
+        self.font_size = font_size
         self.is_hovered = False
 
     def draw(self, screen):
         """Отрисовка кнопки."""
         color = self.hover_color if self.is_hovered else self.color
         pygame.draw.rect(screen, color, self.rect)
-        text_surface = self.font.render(self.text, True, self.text_color)
+
+        font = pygame.font.Font(None, self.font_size)
+        text_surface = font.render(self.text, True, self.text_color)
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
 
-    def check_hover(self, mouse_pos):
-        """Проверка, находится ли курсор над кнопкой."""
-        self.is_hovered = self.rect.collidepoint(mouse_pos)
+    def is_clicked(self, pos):
+        """Проверка, был ли клик по кнопке."""
+        return self.rect.collidepoint(pos)
 
-    def is_clicked(self, mouse_pos):
-        """Проверка, была ли кнопка нажата."""
-        return self.rect.collidepoint(mouse_pos)
+    def update_hover(self, pos):
+        """Обновление состояния наведения."""
+        self.is_hovered = self.rect.collidepoint(pos)
