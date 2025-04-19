@@ -117,18 +117,41 @@ def handle_start_screen_events():
         pygame.display.flip()
 
 
-# Основная игра
 def play_game():
     # Создание доски
     board = Board()
 
     # Список всех возможных фигур
-    pieces = [Pawn, Rook, Bishop, Knight, King, Queen]
+    available_pieces = [
+        Pawn('white', -1, -1),  # Пешка
+        Rook('white', -1, -1),  # Ладья
+        Bishop('white', -1, -1), # Слон
+        Knight('white', -1, -1), # Конь
+        Queen('white', -1, -1),  # Ферзь
+        King('white', -1, -1)    # Король
+    ]
+    selected_piece = None  # Текущая выбранная фигура
+
+    # Кнопка "Проверить"
+    check_button = Button(
+        x=650,  # Координата X для кнопки
+        y=WINDOW_SIZE - 80,  # Координата Y для кнопки (внизу)
+        width=150,
+        height=50,
+        text="Проверить",
+        color=BUTTON_COLOR,
+        hover_color=BUTTON_HOVER_COLOR,
+        text_color=TEXT_COLOR,
+        font_size=36
+    )
 
     # Выбор случайной фигуры и её позиции
-    PieceClass = random.choice(pieces)
-    row, col = random.randint(0, 7), random.randint(0, 7)
-    piece = PieceClass('white', row, col)
+    PieceClass = random.choice([Pawn, Rook, Bishop, Knight, King, Queen])
+    target_row, target_col = random.randint(0, 7), random.randint(0, 7)
+    target_piece = PieceClass('white', target_row, target_col)
+
+    # Выбор случайной фигуры для отображения справа
+    selected_available_piece = random.choice(available_pieces)
 
     # Показ фигуры на 5 секунд
     show_piece = True
@@ -143,26 +166,51 @@ def play_game():
                 pygame.quit()
                 sys.exit()
 
-            if not show_piece and event.type == pygame.MOUSEBUTTONDOWN:
-                # Проверка клика игрока
+            # Выбор фигуры
+            if event.type == pygame.MOUSEBUTTONDOWN and not show_piece:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                clicked_col = mouse_x // SQUARE_SIZE
-                clicked_row = mouse_y // SQUARE_SIZE
+                if ((mouse_x - 650) ** 2 + (mouse_y - 50) ** 2) ** 0.5 < 40:  # Примерный центр первой фигуры
+                    selected_piece = selected_available_piece  # Выбираем фигуру
 
-                if clicked_row == row and clicked_col == col:
-                    return "win"  # Игрок выиграл
-                else:
-                    return "lose"  # Игрок проиграл
+                # Размещение выбранной фигуры на доске
+                if selected_piece:
+                    clicked_row = mouse_y // SQUARE_SIZE
+                    clicked_col = mouse_x // SQUARE_SIZE
+
+                    # Проверка, что координаты находятся внутри доски
+                    if 0 <= clicked_row < 8 and 0 <= clicked_col < 8:
+                        selected_piece.row = clicked_row
+                        selected_piece.col = clicked_col
+
+            # Проверка результата
+            if event.type == pygame.MOUSEBUTTONDOWN and check_button.is_clicked(pygame.mouse.get_pos()):
+                for piece in available_pieces:
+                    if piece.row == target_row and piece.col == target_col:
+                        return "win"  # Игрок выиграл
+                return "lose"  # Игрок проиграл
 
         # Отрисовка доски
         screen.fill(WHITE)
         board.draw(screen, SQUARE_SIZE)
 
+        # Отрисовка целевой фигуры на доске (показ на 5 секунд)
         if show_piece and elapsed_time < 5:
-            # Отрисовка фигуры
-            piece.draw(screen, SQUARE_SIZE)
+            target_piece.draw(screen, SQUARE_SIZE, available_pieces=[])
         else:
             show_piece = False
+
+        # Отрисовка доступной фигуры справа от доски (после окончания таймера)
+        if not show_piece:
+            if selected_available_piece.row == -1 and selected_available_piece.col == -1:
+                selected_available_piece.draw(screen, SQUARE_SIZE, available_pieces)
+
+        # Отрисовка выбранной фигуры на доске
+        if selected_piece and selected_piece.row != -1 and selected_piece.col != -1:
+            selected_piece.draw(screen, SQUARE_SIZE, available_pieces)
+
+        # Отрисовка кнопки "Проверить"
+        if not show_piece:
+            check_button.draw(screen)
 
         # Отображение таймера
         if show_piece:
