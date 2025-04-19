@@ -11,7 +11,7 @@ def show_final_screen(screen, result):
     :param result: Результат игры ('win' или 'lose').
     :return: Действие, выбранное пользователем ('retry', 'next', 'menu').
     """
-    pygame.display.set_caption("Финальный экран")
+    pygame.display.set_caption("Результат игры")
 
     # Создание кнопок
     retry_button = Button(
@@ -19,29 +19,39 @@ def show_final_screen(screen, result):
         y=WINDOW_SIZE // 2 - 50,
         width=200,
         height=50,
-        text="Еще раз",
+        text="Повторить",
         color=BUTTON_COLOR,
         hover_color=BUTTON_HOVER_COLOR,
         text_color=TEXT_COLOR,
         font_size=36
     )
 
-    if result == 'win':
-        next_button_text = "Следующая сложность"
-    else:
-        next_button_text = "В главное меню"
-
-    next_button = Button(
+    menu_button = Button(
         x=WINDOW_SIZE // 2 - 100,
-        y=WINDOW_SIZE // 2 + 20,
+        y=WINDOW_SIZE // 2 + 90,
         width=200,
         height=50,
-        text=next_button_text,
+        text="Главное меню",
         color=BUTTON_COLOR,
         hover_color=BUTTON_HOVER_COLOR,
         text_color=TEXT_COLOR,
         font_size=36
     )
+
+    # Кнопка "Следующий уровень" создается только при победе
+    next_button = None
+    if result == 'win':
+        next_button = Button(
+            x=WINDOW_SIZE // 2 - 100,
+            y=WINDOW_SIZE // 2 + 20,
+            width=200,
+            height=50,
+            text="Дальше",
+            color=BUTTON_COLOR,
+            hover_color=BUTTON_HOVER_COLOR,
+            text_color=TEXT_COLOR,
+            font_size=36
+        )
 
     while True:
         screen.fill(WHITE)
@@ -59,18 +69,28 @@ def show_final_screen(screen, result):
                 pygame.quit()
                 exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return 'menu'  # Возвращаемся в главное меню
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if retry_button.is_clicked(mouse_pos):
                     return 'retry'
-                elif next_button.is_clicked(mouse_pos):
-                    return 'next' if result == 'win' else 'menu'
+                elif next_button and next_button.is_clicked(mouse_pos):
+                    return 'next'
+                elif menu_button.is_clicked(mouse_pos):
+                    return 'menu'
 
         # Обновление состояния кнопок
         retry_button.update_hover(mouse_pos)
-        next_button.update_hover(mouse_pos)
+        if next_button:
+            next_button.update_hover(mouse_pos)
+        menu_button.update_hover(mouse_pos)
 
         # Отрисовка кнопок
         retry_button.draw(screen)
-        next_button.draw(screen)
+        if next_button:
+            next_button.draw(screen)
+        menu_button.draw(screen)
 
         pygame.display.flip()

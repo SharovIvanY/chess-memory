@@ -12,6 +12,9 @@ def generate_available_pieces(difficulty):
     :param difficulty: Уровень сложности (от 1 до 8).
     :return: Список фигур.
     """
+    if isinstance(difficulty, str):
+        difficulty = int(difficulty)
+        
     piece_classes = [King, Queen, Rook, Bishop, Knight, Pawn]
     num_pieces = min(difficulty, len(piece_classes))  # Количество фигур зависит от сложности
     selected_classes = random.sample(piece_classes, num_pieces)

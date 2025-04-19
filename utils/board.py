@@ -5,7 +5,7 @@ class Board:
     def __init__(self):
         self.grid = [[(i + j) % 2 for j in range(8)] for i in range(8)]  # Шахматная раскраска
 
-    def draw(self, screen, square_size):
+    def draw(self, screen):
         """Отрисовка доски."""
         for row in range(8):
             for col in range(8):
@@ -13,5 +13,5 @@ class Board:
                 pygame.draw.rect(
                     screen,
                     color,
-                    (col * square_size, row * square_size, square_size, square_size)
+                    (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 )

@@ -1,3 +1,4 @@
+import json
 import pygame
 from settings import WINDOW_SIZE, BLACK, WHITE, BUTTON_COLOR, BUTTON_HOVER_COLOR, TEXT_COLOR
 from utils.button import Button
@@ -7,7 +8,7 @@ def show_start_screen(screen):
     """
     Отображение стартового экрана.
     :param screen: Объект pygame.Surface (экран).
-    :return: Действие, выбранное пользователем ('start' или 'quit').
+    :return: Действие, выбранное пользователем ('start', 'quit' или 'reset').
     """
     pygame.display.set_caption("Шахматная память")
 
@@ -36,6 +37,18 @@ def show_start_screen(screen):
         font_size=36
     )
 
+    reset_button = Button(
+        x=20,  # Левый верхний угол
+        y=20,
+        width=200,
+        height=40,
+        text="Сбросить прогресс",
+        color=(255, 0, 0),  # Красный цвет
+        hover_color=(150, 0, 0),
+        text_color=WHITE,
+        font_size=24
+    )
+
     while True:
         screen.fill(WHITE)
 
@@ -54,13 +67,22 @@ def show_start_screen(screen):
                     return 'start'
                 elif quit_button.is_clicked(mouse_pos):
                     return 'quit'
+                elif reset_button.is_clicked(mouse_pos):
+                    # Сброс прогресса
+                    initial_data = {"unlocked_levels": [1]}
+                    with open("save.json", "w") as file:
+                        json.dump(initial_data, file)
+                    print("Прогресс сброшен!")
+                    return 'reset'
 
         # Обновление состояния кнопок
         start_button.update_hover(mouse_pos)
         quit_button.update_hover(mouse_pos)
+        reset_button.update_hover(mouse_pos)
 
         # Отрисовка кнопок
         start_button.draw(screen)
         quit_button.draw(screen)
+        reset_button.draw(screen)
 
         pygame.display.flip()
