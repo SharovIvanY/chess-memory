@@ -1,5 +1,5 @@
 import pygame
-import json
+from utils.save_utils import load_unlocked_levels, save_unlocked_levels
 from settings import WINDOW_SIZE, MAX_DIFFICULTY
 from screens.start_screen import show_start_screen
 from screens.difficulty_screen import show_difficulty_screen
@@ -7,23 +7,6 @@ from screens.game_screen import play_game
 from screens.final_screen import show_final_screen
 from utils.piece_images import load_piece_images
 
-def load_unlocked_levels():
-    """Загрузка доступных уровней из save.json."""
-    try:
-        with open("save.json", "r") as file:
-            data = json.load(file)
-            return data.get("unlocked_levels", [1])
-    except FileNotFoundError:
-        # Если файл не найден, создаем новый с начальными данными
-        initial_data = {"unlocked_levels": [1]}
-        with open("save.json", "w") as file:
-            json.dump(initial_data, file)
-        return [1]
-
-def save_unlocked_levels(unlocked_levels):
-    """Сохранение доступных уровней в save.json."""
-    with open("save.json", "w") as file:
-        json.dump({"unlocked_levels": unlocked_levels}, file)
 
 def main():
     pygame.init()
@@ -85,6 +68,7 @@ def main():
                 break  # Вернуться в главное меню
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()

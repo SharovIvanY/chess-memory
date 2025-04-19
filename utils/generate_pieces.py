@@ -6,6 +6,7 @@ from pieces.bishop import Bishop
 from pieces.knight import Knight
 from pieces.pawn import Pawn
 
+
 def generate_available_pieces(difficulty):
     """
     Генерирует список доступных фигур в зависимости от уровня сложности.

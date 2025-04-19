@@ -1,4 +1,6 @@
 import pygame
+from sys import exit
+
 from settings import WINDOW_SIZE, BLACK, WHITE, BUTTON_COLOR, BUTTON_HOVER_COLOR, TEXT_COLOR
 from utils.button import Button
 from utils.draw_utils import draw_text

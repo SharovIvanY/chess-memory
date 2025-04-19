@@ -1,5 +1,23 @@
 import pygame
 from settings import BLACK, SQUARE_SIZE
+import os
+import sys
+
+
+def resource_path(relative_path):
+    """
+    Возвращает абсолютный путь к ресурсу, работая как в режиме разработки,
+    так и в режиме собранного .exe файла.
+    """
+    try:
+        # PyInstaller создает временную папку, путь к которой хранится в _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        # В режиме разработки используем текущую рабочую директорию
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 def draw_text(screen, text, size, color, x, y):
     """

@@ -1,6 +1,7 @@
 import pygame
 from settings import LIGHT_SQUARE_COLOR, DARK_SQUARE_COLOR, SQUARE_SIZE
 
+
 class Board:
     def __init__(self):
         self.grid = [[(i + j) % 2 for j in range(8)] for i in range(8)]  # Шахматная раскраска

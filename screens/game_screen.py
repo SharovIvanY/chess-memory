@@ -1,10 +1,12 @@
 import pygame
 import random
+from sys import exit
 from settings import BOARD_SIZE, WINDOW_SIZE, SQUARE_SIZE, LIGHT_SQUARE_COLOR, DARK_SQUARE_COLOR, BUTTON_COLOR, BUTTON_HOVER_COLOR, TEXT_COLOR, WHITE, BLACK
 from utils.draw_utils import draw_text, highlight_square
 from utils.generate_pieces import generate_available_pieces
 from utils.button import Button
 from utils.board import Board
+
 
 def play_game(screen, difficulty, piece_images):
     # Создание доски

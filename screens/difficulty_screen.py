@@ -1,8 +1,10 @@
 import pygame
 import json
+from sys import exit
 from utils.button import Button
 from utils.draw_utils import draw_text
 from settings import WINDOW_SIZE, BLACK, WHITE, BUTTON_COLOR, BUTTON_HOVER_COLOR, TEXT_COLOR
+
 
 def load_unlocked_levels():
     """Загрузка доступных уровней из save.json."""
